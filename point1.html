@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>档案六 · 点位一</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', 'SimSun', serif;
+            background: #f5f0e1;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            min-height: 100vh;
+            color: #3d2b1f;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            background: linear-gradient(180deg, 
+                rgba(245, 240, 225, 0.95) 0%, 
+                rgba(235, 225, 200, 0.95) 50%,
+                rgba(225, 215, 190, 0.95) 100%);
+        }
+
+        .archive-header {
+            text-align: center;
+            padding: 30px 0 20px;
+            position: relative;
+        }
+
+        .archive-number {
+            font-size: 14px;
+            color: #5c4033;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .archive-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #8b0000;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.3s forwards;
+        }
+
+        .archive-year {
+            font-size: 36px;
+            font-weight: bold;
+            color: #8b4513;
+            letter-spacing: 5px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .divider {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b4513, transparent);
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.9s forwards;
+        }
+
+        .story-section {
+            background: rgba(139, 69, 19, 0.05);
+            border-radius: 4px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            border: 2px solid #8b4513;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.2s forwards;
+        }
+
+        .story-section::before {
+            content: '【档案编号：点位一】';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f5f0e1;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #8b0000;
+            letter-spacing: 1px;
+            border: 1px solid #8b0000;
+        }
+
+        .story-text {
+            font-size: 15px;
+            line-height: 2;
+            text-align: justify;
+            color: #3d2b1f;
+            min-height: 200px;
+        }
+
+        .story-text p {
+            margin-bottom: 15px;
+            text-indent: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #8b0000;
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .question-section {
+            margin: 30px 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.5s forwards;
+        }
+
+        .question-title {
+            font-size: 18px;
+            color: #8b0000;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 500;
+            position: relative;
+            letter-spacing: 2px;
+        }
+
+        .question-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b4513, transparent);
+            margin: 10px auto 0;
+        }
+
+        .option-card {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.05) 0%, rgba(139, 69, 19, 0.1) 100%);
+            border: 2px solid #8b4513;
+            border-radius: 4px;
+            padding: 0;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .option-card.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.15), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .option-card:hover::before {
+            left: 100%;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.25),
+                        0 0 0 1px rgba(212, 175, 55, 0.1);
+        }
+
+        .option-card:active {
+            transform: scale(0.98);
+        }
+
+        .option-header-bar {
+            display: flex;
+            align-items: center;
+            padding: 15px 18px;
+            background: rgba(212, 175, 55, 0.08);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border-radius: 10px;
+            font-weight: bold;
+            color: #1a1a2e;
+            font-size: 18px;
+            margin-right: 12px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .option-title {
+            font-size: 15px;
+            color: #e8d5b7;
+            font-weight: 600;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .option-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover .option-arrow {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .option-body {
+            padding: 15px 18px;
+        }
+
+        .option-desc {
+            font-size: 13px;
+            color: #9a8b7a;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: scale(1.1);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #5a4a3a;
+            font-size: 12px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 2.5s forwards;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            color: #d4af37;
+            font-size: 16px;
+            letter-spacing: 3px;
+        }
+
+        .back-to-map-btn {
+            display: block;
+            width: 80%;
+            max-width: 280px;
+            margin: 30px auto;
+            padding: 14px 30px;
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 25px;
+            font-size: 14px;
+            color: #d4af37;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 2.8s forwards;
+        }
+
+        .back-to-map-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        /* 提示按钮 */
+        .hint-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .hint-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* 提示弹窗 */
+        .hint-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .hint-overlay.show {
+            display: flex;
+        }
+
+        .hint-content {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 350px;
+            width: 100%;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hint-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hint-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .hint-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .hint-text {
+            font-size: 14px;
+            color: #c9b896;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .hint-close-btn {
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border: none;
+            border-radius: 20px;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .hint-close-btn:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-text">档案解密中...</div>
+    </div>
+
+    <div class="particles" id="particles"></div>
+    
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="hint-btn" onclick="showHint()">💡</div>
+
+    <!-- 提示弹窗 -->
+    <div class="hint-overlay" id="hintOverlay">
+        <div class="hint-content">
+            <div class="hint-header">
+                <div class="hint-icon">💡</div>
+                <div class="hint-title">探索提示</div>
+            </div>
+            <div class="hint-text" id="hintText">
+                【提示内容待填】
+            </div>
+            <button class="hint-close-btn" onclick="hideHint()">知道了</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="archive-header">
+            <div class="archive-number">档案六 · 点位一</div>
+            <div class="archive-title">【标题待填】</div>
+            <div class="archive-year">【年份】</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="story-section">
+            <div class="story-text" id="storyText"></div>
+        </div>
+
+        <div class="question-section">
+            <div class="question-title">【问题待填】</div>
+
+            <div class="option-card" id="optionA" onclick="goToDetail('A')">
+                <div class="option-header-bar">
+                    <span class="option-label">A</span>
+                    <div class="option-title">【选项A标题待填】</div>
+                    <div class="option-arrow">→</div>
+                </div>
+                <div class="option-body">
+                    <div class="option-desc">【选项A描述待填】</div>
+                </div>
+            </div>
+
+            <div class="option-card" id="optionB" onclick="goToDetail('B')">
+                <div class="option-header-bar">
+                    <span class="option-label">B</span>
+                    <div class="option-title">【选项B标题待填】</div>
+                    <div class="option-arrow">→</div>
+                </div>
+                <div class="option-body">
+                    <div class="option-desc">【选项B描述待填】</div>
+                </div>
+            </div>
+
+            <div class="option-card" id="optionC" onclick="goToDetail('C')">
+                <div class="option-header-bar">
+                    <span class="option-label">C</span>
+                    <div class="option-title">【选项C标题待填】</div>
+                    <div class="option-arrow">→</div>
+                </div>
+                <div class="option-body">
+                    <div class="option-desc">【选项C描述待填】</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="back-to-map-btn" onclick="goBack()">← 返回地图</button>
+
+        <div class="footer">
+            档案六 · 点位一
+        </div>
+    </div>
+
+    <script>
+        const storyContent = `【故事内容待填】
+
+【故事内容待填】
+
+【故事内容待填】`;
+
+        let charIndex = 0;
+        let currentText = '';
+        const storyElement = document.getElementById('storyText');
+        let isTyping = true;
+        let typingTimeout = null;
+
+        function typeWriter() {
+            if (charIndex < storyContent.length) {
+                const char = storyContent.charAt(charIndex);
+                if (char === '\n') {
+                    currentText += '<br>';
+                } else {
+                    currentText += char;
+                }
+                storyElement.innerHTML = currentText + '<span class="typewriter-cursor"></span>';
+                charIndex++;
+                
+                const delay = char === '。' || char === '，' ? 150 : 50;
+                typingTimeout = setTimeout(typeWriter, delay);
+            } else {
+                storyElement.innerHTML = currentText;
+                isTyping = false;
+                showOptions();
+            }
+        }
+
+        function skipTypewriter() {
+            if (isTyping && charIndex < storyContent.length) {
+                clearTimeout(typingTimeout);
+                currentText = storyContent.replace(/\n/g, '<br>');
+                storyElement.innerHTML = currentText;
+                charIndex = storyContent.length;
+                isTyping = false;
+                showOptions();
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            if (isTyping && !e.target.closest('.back-btn') && !e.target.closest('.option-card')) {
+                skipTypewriter();
+            }
+        });
+
+        function showOptions() {
+            const options = ['optionA', 'optionB', 'optionC'];
+            options.forEach((id, index) => {
+                setTimeout(() => {
+                    document.getElementById(id).classList.add('show');
+                }, index * 200);
+            });
+        }
+
+        function goToDetail(option) {
+            window.location.href = `point1-detail.html?option=${option}`;
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // 提示功能
+        const hintContent = `【提示内容待填】
+
+【提示内容待填】`;
+
+        function showHint() {
+            document.getElementById('hintText').innerText = hintContent;
+            document.getElementById('hintOverlay').classList.add('show');
+        }
+
+        function hideHint() {
+            document.getElementById('hintOverlay').classList.remove('show');
+        }
+
+        // 点击遮罩关闭提示
+        document.getElementById('hintOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideHint();
+            }
+        });
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        window.onload = function() {
+            createParticles();
+            
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hide');
+                setTimeout(typeWriter, 500);
+            }, 800);
+        };
+    </script>
+</body>
+</html>

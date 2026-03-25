@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>档案六 · 陈毅广场 · 详情</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Serif SC', 'SimSun', serif;
+            background: #f5f0e1;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            min-height: 100vh;
+            color: #3d2b1f;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            background: linear-gradient(180deg, rgba(245, 240, 225, 0.95) 0%, rgba(235, 225, 200, 0.95) 50%, rgba(225, 215, 190, 0.95) 100%);
+        }
+        .back-btn { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; background: rgba(139, 69, 19, 0.2); border: 2px solid #8b4513; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #5c4033; font-size: 20px; cursor: pointer; transition: all 0.3s ease; z-index: 100; }
+        .back-btn:hover { background: rgba(139, 69, 19, 0.3); transform: scale(1.1); }
+        
+        .hint-btn { position: fixed; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(139, 69, 19, 0.2); border: 2px solid #8b4513; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #5c4033; font-size: 18px; cursor: pointer; transition: all 0.3s ease; z-index: 100; }
+        .hint-btn:hover { background: rgba(139, 69, 19, 0.3); transform: scale(1.1); }
+        
+        .hint-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .hint-overlay.show { display: flex; }
+        .hint-content { background: linear-gradient(180deg, #f5f0e1 0%, #e8dcc8 100%); border: 3px solid #8b4513; border-radius: 4px; padding: 25px; max-width: 350px; width: 100%; animation: modalIn 0.3s ease; position: relative; }
+        .hint-content::before { content: '提示'; position: absolute; top: -10px; left: 20px; background: #f5f0e1; padding: 0 10px; font-size: 11px; color: #8b0000; border: 1px solid #8b0000; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .hint-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .hint-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #8b4513, #a0522d); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #f5f0e1; }
+        .hint-title { font-size: 18px; font-weight: bold; color: #8b0000; }
+        .hint-text { font-size: 14px; color: #3d2b1f; line-height: 1.8; margin-bottom: 20px; }
+        .hint-close-btn { background: linear-gradient(135deg, #8b0000, #a52a2a); border: 2px solid #d4a574; border-radius: 4px; padding: 12px 30px; font-size: 14px; font-weight: bold; color: #f5f0e1; cursor: pointer; transition: all 0.3s ease; width: 100%; font-family: 'Noto Serif SC', serif; letter-spacing: 2px; }
+        .hint-close-btn:hover { transform: scale(1.02); }
+        
+        .archive-header { text-align: center; padding: 30px 0 20px; }
+        .archive-number { font-size: 14px; color: #5c4033; letter-spacing: 3px; margin-bottom: 10px; opacity: 0; animation: fadeIn 0.8s ease forwards; }
+        .archive-title { font-size: 24px; font-weight: bold; color: #8b0000; letter-spacing: 2px; margin-bottom: 8px; opacity: 0; animation: fadeIn 0.8s ease 0.3s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .divider { width: 80%; height: 2px; background: linear-gradient(90deg, transparent, #8b4513, transparent); margin: 20px auto; opacity: 0; animation: fadeIn 0.8s ease 0.6s forwards; }
+        
+        .option-content { display: none; opacity: 0; animation: fadeIn 0.8s ease 0.9s forwards; }
+        .option-content.active { display: block; }
+        
+        .stem-section { background: rgba(139, 69, 19, 0.05); border-radius: 4px; padding: 25px 20px; margin: 20px 0; border: 2px solid #8b4513; position: relative; }
+        .stem-label { position: absolute; top: -12px; left: 20px; background: #f5f0e1; padding: 0 10px; font-size: 12px; color: #8b0000; letter-spacing: 1px; border: 1px solid #8b0000; }
+        .stem-text { font-size: 15px; line-height: 2; text-align: justify; color: #3d2b1f; }
+        
+        .poem-section { background: rgba(139, 69, 19, 0.05); border-left: 3px solid #8b4513; padding: 20px 25px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .poem-title { font-size: 15px; color: #8b0000; margin-bottom: 12px; font-weight: 500; }
+        .poem-content { font-size: 16px; line-height: 2.4; color: #3d2b1f; text-align: center; letter-spacing: 3px; }
+        
+        .questions-section { margin: 30px 0; }
+        .question-item { background: rgba(139, 69, 19, 0.05); border: 2px solid #8b4513; border-radius: 4px; padding: 15px; margin-bottom: 15px; }
+        .question-number { display: inline-block; background: linear-gradient(135deg, #8b4513, #a0522d); color: #f5f0e1; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        .question-text { font-size: 14px; line-height: 1.8; color: #3d2b1f; }
+        
+        .answer-section { margin: 30px 0; text-align: center; }
+        .answer-label { font-size: 14px; color: #8b0000; margin-bottom: 15px; letter-spacing: 1px; }
+        .answer-input-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .answer-input { width: 50px; height: 50px; background: rgba(139, 69, 19, 0.05); border: 2px solid #8b4513; border-radius: 4px; text-align: center; font-size: 24px; color: #8b0000; font-weight: bold; transition: all 0.3s ease; font-family: 'Noto Serif SC', serif; }
+        .answer-input:focus { outline: none; border-color: #8b0000; box-shadow: 0 0 15px rgba(139, 0, 0, 0.2); }
+        .answer-input.correct { border-color: #228b22; background: rgba(34, 139, 34, 0.1); }
+        .answer-input.wrong { border-color: #8b0000; background: rgba(139, 0, 0, 0.1); animation: shake 0.5s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        
+        .submit-btn { background: linear-gradient(135deg, #8b0000, #a52a2a); border: 2px solid #d4a574; border-radius: 4px; padding: 15px 40px; font-size: 16px; font-weight: bold; color: #f5f0e1; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3); font-family: 'Noto Serif SC', serif; letter-spacing: 2px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 0, 0, 0.4); }
+        
+        .result-message { margin-top: 20px; padding: 15px; border-radius: 4px; font-size: 14px; line-height: 1.6; opacity: 0; transition: opacity 0.5s ease; }
+        .result-message.show { opacity: 1; }
+        .result-message.correct { background: rgba(34, 139, 34, 0.1); border: 2px solid #228b22; color: #228b22; }
+        .result-message.wrong { background: rgba(139, 0, 0, 0.1); border: 2px solid #8b0000; color: #8b0000; }
+        
+        .choices-section { margin: 20px 0; }
+        .choices-label { font-size: 14px; color: #8b0000; margin-bottom: 15px; letter-spacing: 1px; }
+        .choice-item { background: rgba(139, 69, 19, 0.05); border: 2px solid #8b4513; border-radius: 4px; padding: 15px; margin-bottom: 12px; cursor: pointer; transition: all 0.3s ease; }
+        .choice-item:hover { background: rgba(139, 69, 19, 0.1); transform: translateX(5px); }
+        .choice-item.selected { background: rgba(139, 69, 19, 0.15); border-color: #8b0000; }
+        .choice-item.correct { background: rgba(34, 139, 34, 0.15); border-color: #228b22; }
+        .choice-item.wrong { background: rgba(139, 0, 0, 0.15); border-color: #8b0000; }
+        .choice-label { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: rgba(139, 69, 19, 0.2); border-radius: 4px; font-size: 15px; font-weight: bold; color: #8b4513; margin-right: 12px; }
+        .choice-item.selected .choice-label { background: linear-gradient(135deg, #8b4513, #a0522d); color: #f5f0e1; }
+        .choice-item.correct .choice-label { background: #228b22; color: #f5f0e1; }
+        .choice-item.wrong .choice-label { background: #8b0000; color: #f5f0e1; }
+        .choice-text { display: inline-block; vertical-align: middle; width: calc(100% - 50px); font-size: 14px; line-height: 1.7; color: #3d2b1f; }
+        
+        .building-quote { background: rgba(139, 69, 19, 0.05); border-radius: 4px; padding: 18px 20px; margin-bottom: 12px; border-left: 3px solid #8b4513; transition: all 0.3s ease; cursor: pointer; }
+        .building-quote:hover { background: rgba(139, 69, 19, 0.1); transform: translateX(5px); }
+        .building-quote.selected { background: rgba(139, 69, 19, 0.15); border-color: #8b0000; }
+        .building-quote.correct { background: rgba(34, 139, 34, 0.15); border-color: #228b22; }
+        .building-quote.wrong { background: rgba(139, 0, 0, 0.15); border-color: #8b0000; }
+        .building-number { font-size: 14px; color: #8b0000; margin-bottom: 10px; font-weight: bold; }
+        .building-text { font-size: 14px; line-height: 1.9; color: #3d2b1f; }
+        
+        .detail-section { background: rgba(139, 69, 19, 0.05); border-radius: 4px; padding: 25px 20px; margin: 20px 0; border: 2px solid #228b22; position: relative; display: none; }
+        .detail-section.show { display: block; animation: fadeIn 0.8s ease forwards; }
+        .detail-label { position: absolute; top: -12px; left: 20px; background: #f5f0e1; padding: 0 10px; font-size: 12px; color: #228b22; letter-spacing: 1px; border: 1px solid #228b22; }
+        .detail-text { font-size: 15px; line-height: 2; text-align: justify; color: #3d2b1f; }
+        .detail-text .typewriter-cursor { display: inline-block; width: 2px; height: 1em; background: #228b22; margin-left: 2px; animation: blink 0.8s infinite; vertical-align: text-bottom; }
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        
+        .back-to-map-btn { display: block; width: 80%; max-width: 280px; margin: 30px auto; padding: 14px 30px; background: transparent; border: 2px solid #8b4513; border-radius: 4px; font-size: 14px; color: #5c4033; cursor: pointer; transition: all 0.3s ease; text-align: center; font-family: 'Noto Serif SC', serif; letter-spacing: 2px; }
+        .back-to-map-btn:hover { background: rgba(139, 69, 19, 0.1); border-color: #8b0000; transform: translateY(-2px); }
+        
+        .footer { text-align: center; padding: 30px 0; color: #5c4033; font-size: 12px; }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: -1; }
+        .particle { position: absolute; width: 2px; height: 2px; background: #8b4513; border-radius: 50%; opacity: 0.3; animation: float 15s infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="hint-btn" onclick="showHint()">💡</div>
+    
+    <div class="hint-overlay" id="hintOverlay">
+        <div class="hint-content">
+            <div class="hint-header">
+                <div class="hint-icon">💡</div>
+                <div class="hint-title">探索提示</div>
+            </div>
+            <div class="hint-text" id="hintText"></div>
+            <button class="hint-close-btn" onclick="hideHint()">知道了</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="archive-header">
+            <div class="archive-number">档案六 · 陈毅广场</div>
+            <div class="archive-title" id="optionTitle">低下头，看脚下承载了百年沉浮的花岗岩地砖</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div id="optionA" class="option-content">
+            <div class="stem-section">
+                <div class="stem-label">题 干</div>
+                <div class="poem-section">
+                    <div class="poem-title">《青松》· 1960年</div>
+                    <div class="poem-content" id="poemText"></div>
+                </div>
+                <div class="stem-text" id="stemTextA"></div>
+            </div>
+
+            <div class="questions-section">
+                <div class="question-item">
+                    <span class="question-number">第一问</span>
+                    <div class="question-text" id="questionText1"></div>
+                </div>
+                <div class="question-item">
+                    <span class="question-number">第二问</span>
+                    <div class="question-text" id="questionText2"></div>
+                </div>
+                <div class="question-item">
+                    <span class="question-number">第三问</span>
+                    <div class="question-text" id="questionText3"></div>
+                </div>
+                <div class="question-item">
+                    <span class="question-number">第四问</span>
+                    <div class="question-text" id="questionText4"></div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <div class="answer-label">请输入四个数字答案</div>
+                <div class="answer-input-group">
+                    <input type="text" class="answer-input" id="input1" maxlength="1" oninput="moveToNext(this, 'input2')">
+                    <input type="text" class="answer-input" id="input2" maxlength="1" oninput="moveToNext(this, 'input3')">
+                    <input type="text" class="answer-input" id="input3" maxlength="1" oninput="moveToNext(this, 'input4')">
+                    <input type="text" class="answer-input" id="input4" maxlength="1" oninput="moveToNext(this, null)">
+                </div>
+                <button class="submit-btn" onclick="checkAnswerA()">确认答案</button>
+                <div class="result-message" id="resultA"></div>
+            </div>
+            
+            <div class="detail-section" id="detailA">
+                <div class="detail-label">档案详情</div>
+                <div class="detail-text" id="detailTextA"></div>
+            </div>
+        </div>
+
+        <div id="optionB" class="option-content hidden">
+            <div class="stem-section">
+                <div class="stem-label">题 干</div>
+                <div class="stem-text" id="stemTextB"></div>
+            </div>
+
+            <div class="choices-section">
+                <div class="choices-label">选 项</div>
+                <div class="choice-item" onclick="selectChoiceB(this, 'A')">
+                    <span class="choice-label">A</span>
+                    <span class="choice-text">这里曾经是农田，偶尔几根烟囱低低地戳在地平线上。三十年过去，一栋一栋地往上长，长出我当年想象不到的高度。一座城市的胆子，比任何人都大。</span>
+                </div>
+                <div class="choice-item" onclick="selectChoiceB(this, 'B')">
+                    <span class="choice-label">B</span>
+                    <span class="choice-text">这些楼曾经挂着别人的旗。旗换了，楼还是那些楼，住进来的人变了，楼的性格却没有变。有些东西留下来，不是因为我们手软，是因为它值得留。</span>
+                </div>
+                <div class="choice-item" onclick="selectChoiceB(this, 'C')">
+                    <span class="choice-label">C</span>
+                    <span class="choice-text">岸边曾经全是工厂和仓库，烟和水混在一起，说不清是什么气味。如今安静下来了，但那股气味我还记得——那是上海真正干活的味道。</span>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="submit-btn" onclick="checkAnswerB()">确认答案</button>
+                <div class="result-message" id="resultB"></div>
+            </div>
+            
+            <div class="detail-section" id="detailB">
+                <div class="detail-label">档案详情</div>
+                <div class="detail-text" id="detailTextB"></div>
+            </div>
+        </div>
+
+        <div id="optionC" class="option-content hidden">
+            <div class="stem-section">
+                <div class="stem-label">题 干</div>
+                <div class="stem-text" id="stemTextC"></div>
+            </div>
+
+            <div class="choices-section">
+                <div class="choices-label">建筑自述（点击选择答案）</div>
+                <div class="building-quote" onclick="selectChoiceC(this, '甲')">
+                    <div class="building-number">甲</div>
+                    <div class="building-text">说我繁复？雕花多？那确实是比我右边那个要好看的多，我不明白为什么有人喜欢素的——素有什么好，又不是买不起。我就是喜欢拱形的门窗，每一扇上面都是故事。</div>
+                </div>
+                <div class="building-quote" onclick="selectChoiceC(this, '乙')">
+                    <div class="building-number">乙</div>
+                    <div class="building-text">我已经在这里站了一个多世纪来，我没有我右边的那位高，没关系，有两个大柱子撑着，我就会堂堂正正的站着。</div>
+                </div>
+                <div class="building-quote" onclick="selectChoiceC(this, '丙')">
+                    <div class="building-number">丙</div>
+                    <div class="building-text">你来外滩，一定会来看我的。不用解释也不屑于解释。我的功能是你们都没有的。</div>
+                </div>
+                <div class="building-quote" onclick="selectChoiceC(this, '丁')">
+                    <div class="building-number">丁</div>
+                    <div class="building-text">他们都不希望我长这么高。我偏不让他们满意，甚至还在屋顶上加了飞檐——就这一处，整条街上找不到第二个。我不想和你们任何人争，但我的来历你们都没有。</div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="submit-btn" onclick="checkAnswerC()">确认答案</button>
+                <div class="result-message" id="resultC"></div>
+            </div>
+            
+            <div class="detail-section" id="detailC">
+                <div class="detail-label">档案详情</div>
+                <div class="detail-text" id="detailTextC"></div>
+            </div>
+        </div>
+
+        <button class="back-to-map-btn" onclick="goToMap()">← 返回地图</button>
+        <div class="footer">Q7 · 档案编号：1949·接管这座城市的第一天</div>
+    </div>
+
+    <script>
+        const optionData = {
+            A: {
+                title: '低下头，看脚下承载了百年沉浮的花岗岩地砖',
+                poem: '大雪压青松，青松挺且直。要知松高洁，待到雪化时。',
+                stem: '1960年，陈毅在政治压抑最深的年代，写下了《青松》。',
+                answer: '2119',
+                questions: [
+                    '大雪压青松：风雪最烈时，将星悄然陨落，那一年最后的数字是什么？',
+                    '青松挺且直：浦江破晓，他挺身而出，是这座城市解放后第几位掌舵人？',
+                    '要知松高洁：高洁源于根，欲知将军来处，寻他生根那年最末的印记。',
+                    '待到雪化时：雪化风清，申城万众立碑缅怀，选在了哪个月与他重逢？'
+                ],
+                hint: '陈毅将军于1972年逝世，他是上海解放后的第一任市长。他出生于1901年，1993年陈毅广场建成开放。',
+                detail: '陈毅将军于1972年1月6日逝世。他是上海解放后的第一任市长，出生于1901年。1993年9月，陈毅广场在外滩建成开放，以纪念这位为上海解放和发展做出巨大贡献的将军市长。'
+            },
+            B: {
+                title: '抬起头，望向对岸那片即将生长的天际线',
+                stem: '陈毅的雕像立在外滩，面朝着某个方向，一站就是几十年。\n\n他在看什么，他在想什么？站到陈毅市长的正面，确认他目光的方向。',
+                answer: 'A',
+                hint: '陈毅市长的雕像面向黄浦江，目光望向对岸的浦东陆家嘴方向。',
+                detail: '陈毅市长的雕像矗立在外滩，面向黄浦江对岸的浦东。他的目光望向陆家嘴方向，仿佛在注视着这片曾经是农田、如今已成为国际金融中心的土地，见证着上海这座城市的崛起与变迁。'
+            },
+            C: {
+                title: '转身回望外滩——在动手建造未来之前，先逐栋记录现在还活着的东西',
+                stem: '规划师转身，身后是一排沉默了一百年的楼。\n\n但今天它们开口了。转身面向外滩，找到眼前这排建筑。\n\n下面四段话，分别出自其中四栋楼。把它们从左到右排好顺序，告诉我左手边第二个楼叫什么名字。',
+                answer: '丁',
+                hint: '观察外滩建筑的特色：繁复雕花、大柱子、独特功能、飞檐屋顶。从左到右依次观察它们的特征。',
+                detail: '外滩的建筑群各具特色。从左到右，你可以看到不同风格的建筑：有繁复雕花的、有高大柱子的、有独特功能的、有飞檐屋顶的。每一栋楼都承载着百年的历史，见证着上海的变迁。'
+            }
+        };
+
+        let currentOption = 'A';
+        let stemCharIndex = 0;
+        let poemCharIndex = 0;
+        let selectedAnswerB = null;
+        let selectedAnswerC = null;
+        let isTyping = false;
+
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function typeWriterPoem() {
+            const poem = optionData.A.poem;
+            const element = document.getElementById('poemText');
+            
+            if (poemCharIndex < poem.length) {
+                const char = poem.charAt(poemCharIndex);
+                let html = element.innerHTML;
+                
+                if (char === '，' || char === '。') {
+                    html += char + '<br>';
+                } else {
+                    html += char;
+                }
+                element.innerHTML = html + '<span class="typewriter-cursor"></span>';
+                poemCharIndex++;
+                
+                const delay = char === '，' || char === '。' ? 200 : 100;
+                setTimeout(typeWriterPoem, delay);
+            } else {
+                element.innerHTML = element.innerHTML.replace('<span class="typewriter-cursor"></span>', '');
+                typeWriterStem();
+            }
+        }
+
+        function typeWriterStem() {
+            const stem = optionData[currentOption].stem;
+            const elementId = 'stemText' + currentOption;
+            const element = document.getElementById(elementId);
+            
+            if (stemCharIndex < stem.length) {
+                isTyping = true;
+                const char = stem.charAt(stemCharIndex);
+                let html = element.innerHTML;
+                
+                if (char === '\n') {
+                    html += '<br>';
+                } else {
+                    html += char;
+                }
+                element.innerHTML = html + '<span class="typewriter-cursor"></span>';
+                stemCharIndex++;
+                
+                const delay = char === '。' || char === '，' || char === '？' ? 150 : 40;
+                setTimeout(typeWriterStem, delay);
+            } else {
+                isTyping = false;
+                element.innerHTML = element.innerHTML.replace('<span class="typewriter-cursor"></span>', '');
+                
+                if (currentOption === 'A') {
+                    typeWriterQuestions();
+                }
+            }
+        }
+
+        function typeWriterQuestions() {
+            const questions = optionData.A.questions;
+            let currentQuestionIndex = 0;
+            
+            function typeNextQuestion() {
+                if (currentQuestionIndex >= questions.length) return;
+                
+                const questionText = questions[currentQuestionIndex];
+                const elementId = 'questionText' + (currentQuestionIndex + 1);
+                const element = document.getElementById(elementId);
+                let charIndex = 0;
+                
+                function typeChar() {
+                    if (charIndex < questionText.length) {
+                        const char = questionText.charAt(charIndex);
+                        element.innerHTML += char;
+                        charIndex++;
+                        const delay = char === '。' || char === '，' || char === '？' ? 100 : 30;
+                        setTimeout(typeChar, delay);
+                    } else {
+                        currentQuestionIndex++;
+                        setTimeout(typeNextQuestion, 300);
+                    }
+                }
+                typeChar();
+            }
+            typeNextQuestion();
+        }
+
+        function init() {
+            currentOption = getUrlParam('option') || 'A';
+            
+            document.getElementById('optionTitle').textContent = optionData[currentOption].title;
+            document.getElementById('hintText').textContent = optionData[currentOption].hint;
+            
+            document.querySelectorAll('.option-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('option' + currentOption).classList.remove('hidden');
+            document.getElementById('option' + currentOption).classList.add('active');
+
+            if (currentOption === 'A') {
+                setTimeout(typeWriterPoem, 800);
+            } else {
+                setTimeout(typeWriterStem, 800);
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'point6.html';
+        }
+
+        function goToMap() {
+            window.location.href = 'index.html';
+        }
+
+        function showHint() {
+            document.getElementById('hintOverlay').classList.add('show');
+        }
+
+        function hideHint() {
+            document.getElementById('hintOverlay').classList.remove('show');
+        }
+
+        document.getElementById('hintOverlay').addEventListener('click', function(e) {
+            if (e.target === this) hideHint();
+        });
+
+        function moveToNext(current, nextId) {
+            if (current.value.length === 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+        }
+
+        function selectChoiceB(element, answer) {
+            document.querySelectorAll('#optionB .choice-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAnswerB = answer;
+        }
+
+        function selectChoiceC(element, answer) {
+            document.querySelectorAll('#optionC .building-quote').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAnswerC = answer;
+        }
+
+        function checkAnswerA() {
+            const answer = document.getElementById('input1').value +
+                          document.getElementById('input2').value +
+                          document.getElementById('input3').value +
+                          document.getElementById('input4').value;
+            
+            const inputs = document.querySelectorAll('.answer-input');
+            const resultEl = document.getElementById('resultA');
+            
+            if (answer === optionData.A.answer) {
+                inputs.forEach(input => input.classList.add('correct'));
+                resultEl.textContent = '✓ 回答正确！档案解密成功。';
+                resultEl.className = 'result-message show correct';
+                showDetail('A');
+            } else {
+                inputs.forEach(input => {
+                    input.classList.add('wrong');
+                    setTimeout(() => input.classList.remove('wrong'), 500);
+                });
+                resultEl.textContent = '✗ 答案不正确，请重新思考诗句中的线索。';
+                resultEl.className = 'result-message show wrong';
+            }
+        }
+
+        function checkAnswerB() {
+            const resultEl = document.getElementById('resultB');
+            if (!selectedAnswerB) {
+                resultEl.textContent = '请先选择一个答案';
+                resultEl.className = 'result-message show wrong';
+                return;
+            }
+            
+            const selectedEl = document.querySelector('#optionB .choice-item.selected');
+            if (selectedAnswerB === optionData.B.answer) {
+                selectedEl.classList.add('correct');
+                resultEl.textContent = '✓ 回答正确！陈毅市长的目光望向浦东，见证着这座城市的崛起。';
+                resultEl.className = 'result-message show correct';
+                showDetail('B');
+            } else {
+                selectedEl.classList.add('wrong');
+                resultEl.textContent = '✗ 答案不正确，请仔细观察陈毅雕像的目光方向。';
+                resultEl.className = 'result-message show wrong';
+            }
+        }
+
+        function checkAnswerC() {
+            const resultEl = document.getElementById('resultC');
+            if (!selectedAnswerC) {
+                resultEl.textContent = '请先选择一个答案';
+                resultEl.className = 'result-message show wrong';
+                return;
+            }
+            
+            const selectedEl = document.querySelector('#optionC .building-quote.selected');
+            if (selectedAnswerC === optionData.C.answer) {
+                selectedEl.classList.add('correct');
+                resultEl.textContent = '✓ 回答正确！你已成功识别了外滩建筑的顺序。';
+                resultEl.className = 'result-message show correct';
+                showDetail('C');
+            } else {
+                selectedEl.classList.add('wrong');
+                resultEl.textContent = '✗ 答案不正确，请重新观察建筑的特征。';
+                resultEl.className = 'result-message show wrong';
+            }
+        }
+
+        function showDetail(option) {
+            const detailSection = document.getElementById('detail' + option);
+            const detailText = document.getElementById('detailText' + option);
+            detailSection.classList.add('show');
+            
+            const content = optionData[option].detail;
+            let charIndex = 0;
+            
+            function typeDetail() {
+                if (charIndex < content.length) {
+                    const char = content.charAt(charIndex);
+                    detailText.innerHTML += char;
+                    charIndex++;
+                    const delay = char === '。' || char === '，' ? 100 : 30;
+                    setTimeout(typeDetail, delay);
+                }
+            }
+            typeDetail();
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        window.onload = function() {
+            createParticles();
+            init();
+        };
+    </script>
+</body>
+</html>

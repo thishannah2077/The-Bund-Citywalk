@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书封面模版</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: #f0ebe3;
+    font-family: 'Noto Sans SC', sans-serif;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  .covers-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .cover-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .cover-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .cover {
+    width: 270px;
+    height: 360px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cover:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.22), 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  /* ============ COVER 1: 标题在底部 ============ */
+  .c1 {
+    background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+
+  .c1 .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.5;
+  }
+
+  .c1 .bg-circle.c1 { width: 200px; height: 200px; background: #e94560; top: -40px; right: -40px; }
+  .c1 .bg-circle.c2 { width: 160px; height: 160px; background: #533483; top: 80px; left: -30px; }
+  .c1 .bg-circle.c3 { width: 120px; height: 120px; background: #0f3460; bottom: 80px; right: 20px; }
+
+  .c1 .main-image-area {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 72%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c1 .emoji-large {
+    font-size: 80px;
+    filter: drop-shadow(0 0 30px rgba(233,69,96,0.6));
+    animation: float1 3s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .c1 .decorative-dots {
+    position: absolute;
+    top: 20px; left: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 6px);
+    gap: 5px;
+  }
+
+  .c1 .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+  }
+
+  .c1 .bottom-panel {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 60%, transparent 100%);
+    padding: 24px 20px 22px;
+    height: 38%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .c1 .tag {
+    display: inline-block;
+    background: #e94560;
+    color: white;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    width: fit-content;
+    font-weight: 700;
+  }
+
+  .c1 .main-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .c1 .sub-title {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+
+  /* ============ COVER 2: 竖排文字 ============ */
+  .c2 {
+    background: #fdf6ec;
+  }
+
+  .c2 .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #c8a96e, #e8c98a, #c8a96e);
+  }
+
+  .c2 .ink-wash {
+    position: absolute;
+    top: 30px; left: 50%;
+    transform: translateX(-50%);
+    width: 180px; height: 220px;
+    background: radial-gradient(ellipse, rgba(180,160,120,0.12) 0%, rgba(180,160,120,0.05) 60%, transparent 100%);
+    border-radius: 50%;
+  }
+
+  .c2 .circle-deco {
+    position: absolute;
+    top: 40px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 140px;
+    border: 1px solid rgba(180,140,80,0.2);
+    border-radius: 50%;
+  }
+
+  .c2 .circle-deco::after {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 0.5px dashed rgba(180,140,80,0.3);
+    border-radius: 50%;
+  }
+
+  .c2 .center-emoji {
+    position: absolute;
+    top: 72px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 52px;
+  }
+
+  .c2 .vertical-title-right {
+    position: absolute;
+    right: 26px;
+    top: 28px;
+    bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .c2 .vertical-title-right span {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 24px;
+    color: #5a3e28;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 8px;
+    line-height: 1;
+  }
+
+  .c2 .vertical-sub {
+    position: absolute;
+    right: 62px;
+    top: 28px;
+    bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c2 .vertical-sub span {
+    font-size: 10px;
+    color: #b89060;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 4px;
+    font-weight: 300;
+  }
+
+  .c2 .divider-v {
+    position: absolute;
+    right: 56px;
+    top: 40px; bottom: 40px;
+    width: 0.5px;
+    background: linear-gradient(to bottom, transparent, rgba(180,140,80,0.4), transparent);
+  }
+
+  .c2 .bottom-text {
+    position: absolute;
+    bottom: 24px;
+    left: 22px;
+    right: 80px;
+  }
+
+  .c2 .bottom-text .num {
+    font-size: 36px;
+    font-weight: 900;
+    color: #c8a96e;
+    font-family: 'Georgia', serif;
+    line-height: 1;
+  }
+
+  .c2 .bottom-text .num-label {
+    font-size: 9px;
+    color: #b0906a;
+    letter-spacing: 2px;
+    margin-top: 3px;
+    font-weight: 300;
+  }
+
+  .c2 .seal {
+    position: absolute;
+    bottom: 28px;
+    left: 22px;
+    width: 36px; height: 36px;
+    background: #c84040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-family: 'ZCOOL XiaoWei', serif;
+    letter-spacing: 1px;
+  }
+
+  /* ============ COVER 3: 居中大字 ============ */
+  .c3 {
+    background: #0d0d0d;
+  }
+
+  .c3 .noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+
+  .c3 .stripe-bg {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,220,0,0.02) 40px,
+      rgba(255,220,0,0.02) 41px
+    );
+  }
+
+  .c3 .top-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #ffdc00;
+  }
+
+  .c3 .label-top {
+    position: absolute;
+    top: 22px; left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .c3 .label-top .line {
+    height: 1px;
+    width: 40px;
+    background: rgba(255,220,0,0.4);
+  }
+
+  .c3 .label-top span {
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: rgba(255,220,0,0.7);
+    font-weight: 300;
+  }
+
+  .c3 .center-content {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    padding: 0 18px;
+  }
+
+  .c3 .big-emoji {
+    font-size: 42px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .c3 .c3-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.15;
+    letter-spacing: 4px;
+    text-shadow: 0 0 40px rgba(255,220,0,0.3);
+  }
+
+  .c3 .c3-title .highlight {
+    color: #ffdc00;
+    display: block;
+  }
+
+  .c3 .c3-divider {
+    width: 40px;
+    height: 2px;
+    background: #ffdc00;
+    margin: 16px auto;
+  }
+
+  .c3 .c3-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 3px;
+    font-weight: 300;
+  }
+
+  .c3 .bottom-row {
+    position: absolute;
+    bottom: 22px; left: 22px; right: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .c3 .tag-yellow {
+    background: #ffdc00;
+    color: #0d0d0d;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .c3 .page-num {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Georgia', serif;
+    font-style: italic;
+  }
+
+  /* ============ COVER 4: 标题在上方，内容分块 ============ */
+  .c4 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .c4 .mesh {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(255,100,150,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(100,200,255,0.2) 0%, transparent 50%);
+  }
+
+  .c4 .header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 26px 22px 20px;
+  }
+
+  .c4 .header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+  }
+
+  .c4 .header-tag span {
+    font-size: 9px;
+    color: white;
+    letter-spacing: 2px;
+    font-weight: 300;
+  }
+
+  .c4 .header-tag .dot-g {
+    width: 5px; height: 5px;
+    background: #6dffb3;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #6dffb3;
+  }
+
+  .c4 .top-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.25;
+    letter-spacing: 2px;
+  }
+
+  .c4 .top-title .line2 {
+    font-size: 20px;
+    font-weight: 400;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .c4 .cards-area {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .c4 .card-item {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .c4 .card-icon {
+    font-size: 18px;
+    width: 28px;
+    flex-shrink: 0;
+  }
+
+  .c4 .card-text .ct { font-size: 11px; color: white; font-weight: 700; letter-spacing: 0.5px; }
+  .c4 .card-text .cs { font-size: 9px; color: rgba(255,255,255,0.6); margin-top: 1px; letter-spacing: 0.5px; }
+
+  .c4 .card-item.featured {
+    background: rgba(255,255,255,0.22);
+  }
+
+  /* ============ COVER 5: 对角线/斜向布局 ============ */
+  .c5 {
+    background: #f5f0e8;
+  }
+
+  .c5 .bg-shape {
+    position: absolute;
+    bottom: -30px; right: -30px;
+    width: 260px; height: 260px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+
+  .c5 .bg-rect {
+    position: absolute;
+    top: -20px; left: -20px;
+    width: 180px; height: 180px;
+    background: #2d2d2d;
+    border-radius: 30px;
+    transform: rotate(15deg);
+    opacity: 0.06;
+  }
+
+  .c5 .slash-deco {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+  }
+
+  .c5 .slash-deco::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 130%;
+    height: 200%;
+    background: linear-gradient(135deg, transparent 49%, rgba(255,100,80,0.08) 49%, rgba(255,100,80,0.08) 51%, transparent 51%);
+    transform: rotate(-8deg);
+  }
+
+  .c5 .top-left-num {
+    position: absolute;
+    top: 22px; left: 20px;
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.05);
+    font-family: 'Georgia', serif;
+    line-height: 1;
+  }
+
+  .c5 .diagonal-block {
+    position: absolute;
+    top: 30px; right: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .c5 .diag-tag {
+    background: #ff6b4a;
+    color: white;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    transform: rotate(3deg);
+  }
+
+  .c5 .diag-date {
+    font-size: 10px;
+    color: #aaa;
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+
+  .c5 .emoji-mid {
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    font-size: 70px;
+    transform: rotate(-8deg);
+    filter: drop-shadow(4px 8px 16px rgba(0,0,0,0.12));
+  }
+
+  .c5 .main-title-diag {
+    position: absolute;
+    bottom: 80px;
+    left: 18px;
+    right: 18px;
+  }
+
+  .c5 .main-title-diag .pre {
+    font-size: 10px;
+    color: #ff6b4a;
+    font-weight: 700;
+    letter-spacing: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .c5 .main-title-diag .pre::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #ff6b4a;
+    opacity: 0.4;
+    max-width: 50px;
+  }
+
+  .c5 .main-title-diag h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 30px;
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1.2;
+    letter-spacing: 2px;
+  }
+
+  .c5 .main-title-diag h2 .em {
+    color: #ff6b4a;
+  }
+
+  .c5 .bottom-strip {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 62px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    justify-content: space-between;
+  }
+
+  .c5 .bottom-strip .au {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 2px;
+    font-weight: 300;
+  }
+
+  .c5 .bottom-strip .aw {
+    font-size: 10px;
+    color: #ff6b4a;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .c5 .bottom-strip .arrow {
+    width: 22px; height: 22px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+
+<p class="page-title">小红书封面模版 · 5 Styles</p>
+
+<div class="covers-grid">
+
+  <!-- COVER 1: 标题在底部 -->
+  <div class="cover-wrapper">
+    <div class="cover c1">
+      <div class="bg-circle c1"></div>
+      <div class="bg-circle c2"></div>
+      <div class="bg-circle c3"></div>
+
+      <div class="decorative-dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+
+      <div class="main-image-area">
+        <div class="emoji-large">🌙</div>
+      </div>
+
+      <div class="bottom-panel">
+        <span class="tag">LIFESTYLE</span>
+        <div class="main-title">夜间护肤<br>终极指南</div>
+        <div class="sub-title">睡前5步骤 · 让肌肤焕然一新</div>
+      </div>
+    </div>
+    <span class="cover-label">Style 01 · 标题在底部</span>
+  </div>
+
+  <!-- COVER 2: 竖排文字 -->
+  <div class="cover-wrapper">
+    <div class="cover c2">
+      <div class="top-bar"></div>
+      <div class="ink-wash"></div>
+      <div class="circle-deco"></div>
+      <div class="center-emoji">🍵</div>
+
+      <div class="divider-v"></div>
+
+      <div class="vertical-title-right">
+        <span>慢生活美学</span>
+      </div>
+
+      <div class="vertical-sub">
+        <span>一期一会</span>
+      </div>
+
+      <div class="bottom-text">
+        <div class="seal">品</div>
+      </div>
+
+      <!-- bottom left area -->
+      <div style="position:absolute; bottom:24px; left:68px; right:80px;">
+        <div style="font-family:'ZCOOL XiaoWei',serif; font-size:14px; color:#7a5c3c; letter-spacing:3px; line-height:1.8;">
+          茶道 · 花道<br>
+          <span style="font-size:10px; color:#b89060; letter-spacing:2px; font-weight:300;">传统美学研究</span>
+        </div>
+      </div>
+    </div>
+    <span class="cover-label">Style 02 · 竖排文字</span>
+  </div>
+
+  <!-- COVER 3: 居中大字 -->
+  <div class="cover-wrapper">
+    <div class="cover c3">
+      <div class="noise"></div>
+      <div class="stripe-bg"></div>
+      <div class="top-accent"></div>
+
+      <div class="label-top">
+        <span class="line"></span>
+        <span>TRAVEL GUIDE</span>
+        <span class="line"></span>
+      </div>
+
+      <div class="center-content">
+        <span class="big-emoji">✈️</span>
+        <div class="c3-title">
+          出发
+          <span class="highlight">日本</span>
+        </div>
+        <div class="c3-divider"></div>
+        <div class="c3-sub">14天深度旅行攻略</div>
+      </div>
+
+      <div class="bottom-row">
+        <span class="tag-yellow">MUST READ</span>
+        <span class="page-num">Vol.12</span>
+      </div>
+    </div>
+    <span class="cover-label">Style 03 · 居中大字</span>
+  </div>
+
+  <!-- COVER 4: 标题在上方 + 卡片分块 -->
+  <div class="cover-wrapper">
+    <div class="cover c4">
+      <div class="mesh"></div>
+
+      <div class="header">
+        <div class="header-tag">
+          <div class="dot-g"></div>
+          <span>NEW · 2024</span>
+        </div>
+        <div class="top-title">
+          穿搭公式
+          <span class="line2">你也能成为时尚达人</span>
+        </div>
+      </div>
+
+      <div class="cards-area">
+        <div class="card-item featured">
+          <span class="card-icon">👗</span>
+          <div class="card-text">
+            <div class="ct">基础款叠穿法则</div>
+            <div class="cs">简约不简单的高级感</div>
+          </div>
+        </div>
+        <div class="card-item">
+          <span class="card-icon">👟</span>
+          <div class="card-text">
+            <div class="ct">鞋包单品搭配</div>
+            <div class="cs">画龙点睛的细节技巧</div>
+          </div>
+        </div>
+        <div class="card-item">
+          <span class="card-icon">🎨</span>
+          <div class="card-text">
+            <div class="ct">色彩搭配指南</div>
+            <div class="cs">四季配色速查手册</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="cover-label">Style 04 · 上方标题+内容卡片</span>
+  </div>
+
+  <!-- COVER 5: 斜向/对角线布局 -->
+  <div class="cover-wrapper">
+    <div class="cover c5">
+      <div class="bg-shape"></div>
+      <div class="bg-rect"></div>
+      <div class="slash-deco"></div>
+
+      <div class="top-left-num">05</div>
+
+      <div class="diagonal-block">
+        <span class="diag-tag">HOT TIPS</span>
+        <span class="diag-date">2024 · 秋冬</span>
+      </div>
+
+      <div class="emoji-mid">🌿</div>
+
+      <div class="main-title-diag">
+        <div class="pre">精选好物</div>
+        <h2>家居植物<br>养护<span class="em">秘籍</span></h2>
+      </div>
+
+      <div class="bottom-strip">
+        <span class="au">绿植爱好者必看</span>
+        <span class="aw">收藏</span>
+        <span class="arrow">→</span>
+      </div>
+    </div>
+    <span class="cover-label">Style 05 · 斜向对角线布局</span>
+  </div>
+
+</div>
+
+</body>
+</html>

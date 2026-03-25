@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>档案六 · 陈毅广场 · 城市地图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8d5b7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+            position: relative;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: #8b7355;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .divider {
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.6s forwards;
+        }
+
+        .map-container {
+            position: relative;
+            width: 100%;
+            padding-top: 120%;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.9s forwards;
+        }
+
+        .map-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .map-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #5a4a3a;
+            font-size: 14px;
+        }
+
+        .point {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #d4af37 0%, rgba(212, 175, 55, 0.3) 70%, transparent 100%);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .point::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .point:hover {
+            transform: scale(1.2);
+        }
+
+        .point-number {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1a1a2e;
+            font-size: 14px;
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .point-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 12px;
+            color: #d4af37;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .point:hover .point-label {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .point-1 { top: 15%; left: 20%; }
+        .point-2 { top: 25%; left: 70%; }
+        .point-3 { top: 45%; left: 30%; }
+        .point-4 { top: 55%; left: 75%; }
+        .point-5 { top: 75%; left: 25%; }
+        .point-6 { top: 85%; left: 65%; }
+
+        .instructions {
+            text-align: center;
+            padding: 20px;
+            color: #8b7355;
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.2s forwards;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #5a4a3a;
+            font-size: 12px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.5s forwards;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            color: #d4af37;
+            font-size: 16px;
+            letter-spacing: 3px;
+        }
+
+        .finish-btn {
+            display: block;
+            width: 80%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.8s forwards;
+        }
+
+        .finish-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: #c9b896;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 40px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .poster-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .poster-overlay.show {
+            display: flex;
+        }
+
+        .poster-container {
+            width: 320px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f3460 50%, #1a1a2e 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+            animation: posterIn 0.5s ease;
+        }
+
+        @keyframes posterIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .poster-header {
+            padding: 30px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+        }
+
+        .poster-label {
+            font-size: 12px;
+            color: #8b7355;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .poster-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .poster-body {
+            padding: 20px;
+        }
+
+        .poster-building {
+            width: 100%;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .poster-building-icon {
+            font-size: 80px;
+            opacity: 0.8;
+        }
+
+        .poster-personality {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .poster-personality-label {
+            font-size: 12px;
+            color: #8b7355;
+            margin-bottom: 8px;
+        }
+
+        .poster-personality-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .poster-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .poster-trait {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #d4af37;
+        }
+
+        .poster-quote {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #d4af37;
+            padding: 15px;
+            font-size: 13px;
+            color: #c9b896;
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .poster-footer {
+            padding: 15px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .poster-footer-text {
+            font-size: 11px;
+            color: #5a4a3a;
+        }
+
+        .poster-close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 3001;
+        }
+
+        .poster-close-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+        }
+
+        /* 第8题样式 */
+        .question8-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2500;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .question8-overlay.show {
+            display: flex;
+        }
+
+        .question8-content {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 400px;
+            width: 100%;
+            animation: modalIn 0.3s ease;
+        }
+
+        .question8-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .question8-number {
+            font-size: 12px;
+            color: #8b7355;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .question8-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .question8-text {
+            font-size: 15px;
+            color: #e8d5b7;
+            line-height: 1.8;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .question8-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .question8-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 15px 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .question8-option:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+        }
+
+        .question8-option.selected {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: #d4af37;
+        }
+
+        .question8-option-letter {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1a1a2e;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .question8-option-text {
+            font-size: 14px;
+            color: #c9b896;
+            line-height: 1.5;
+        }
+
+        .question8-btn {
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border: none;
+            border-radius: 25px;
+            padding: 14px 40px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .question8-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .question8-btn:disabled {
+            background: rgba(212, 175, 55, 0.3);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 计算特效 */
+        .calculating-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a15 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2600;
+            overflow: hidden;
+        }
+
+        .calculating-overlay.show {
+            display: flex;
+        }
+
+        .calculating-bg-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .calculating-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 3s infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(0) scale(0); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-100px) scale(1); }
+        }
+
+        .calculating-rings {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 40px;
+        }
+
+        .calculating-ring {
+            position: absolute;
+            border: 2px solid transparent;
+            border-radius: 50%;
+        }
+
+        .calculating-ring-1 {
+            width: 100%;
+            height: 100%;
+            border-top-color: #d4af37;
+            border-right-color: rgba(212, 175, 55, 0.5);
+            animation: ringRotate 2s linear infinite;
+        }
+
+        .calculating-ring-2 {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-bottom-color: #c9a961;
+            border-left-color: rgba(201, 169, 97, 0.5);
+            animation: ringRotate 1.5s linear infinite reverse;
+        }
+
+        .calculating-ring-3 {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-top-color: #b8860b;
+            border-right-color: rgba(184, 134, 11, 0.5);
+            animation: ringRotate 1s linear infinite;
+        }
+
+        @keyframes ringRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .calculating-core {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: corePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes corePulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .calculating-icon-center {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            animation: iconFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-10px); }
+        }
+
+        .calculating-text {
+            font-size: 20px;
+            color: #d4af37;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+            50% { text-shadow: 0 0 40px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.4); }
+        }
+
+        .calculating-progress-container {
+            width: 250px;
+            text-align: center;
+        }
+
+        .calculating-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculating-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #8b7355, #d4af37, #c9a961, #d4af37);
+            background-size: 200% 100%;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: progressShine 2s linear infinite;
+        }
+
+        @keyframes progressShine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .calculating-status {
+            font-size: 14px;
+            color: #8b7355;
+            height: 25px;
+            letter-spacing: 2px;
+        }
+
+        .calculating-percent {
+            font-size: 13px;
+            color: #d4af37;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-text">地图加载中...</div>
+    </div>
+
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="header-title">城市档案地图</div>
+            <div class="header-subtitle">点击点位探索历史</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="map-container">
+            <div class="map-placeholder">地图区域</div>
+            
+            <div class="point point-1" onclick="goToPoint(1)">
+                <span class="point-number">1</span>
+                <span class="point-label">点位一</span>
+            </div>
+            
+            <div class="point point-2" onclick="goToPoint(2)">
+                <span class="point-number">2</span>
+                <span class="point-label">点位二</span>
+            </div>
+            
+            <div class="point point-3" onclick="goToPoint(3)">
+                <span class="point-number">3</span>
+                <span class="point-label">点位三</span>
+            </div>
+            
+            <div class="point point-4" onclick="goToPoint(4)">
+                <span class="point-number">4</span>
+                <span class="point-label">点位四</span>
+            </div>
+            
+            <div class="point point-5" onclick="goToPoint(5)">
+                <span class="point-number">5</span>
+                <span class="point-label">点位五</span>
+            </div>
+            
+            <div class="point point-6" onclick="goToPoint(6)">
+                <span class="point-number">6</span>
+                <span class="point-label">点位六</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            点击地图上的金色光点，探索每个点位的历史故事
+        </div>
+
+        <button class="finish-btn" onclick="showFinishModal()">收官 · 生成建筑人格</button>
+
+        <div class="footer">
+            档案六 · 城市地图
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="finishModal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <div class="modal-title">点位收集完毕</div>
+            <div class="modal-text">
+                恭喜你！所有点位信息已收集完毕。<br><br>
+                现在将根据你的探索轨迹，<br>
+                生成专属于你的外滩建筑人格。
+            </div>
+            <button class="modal-btn" onclick="showQuestion8()">继续</button>
+        </div>
+    </div>
+
+    <!-- 第8题 -->
+    <div class="question8-overlay" id="question8Overlay">
+        <div class="question8-content">
+            <div class="question8-header">
+                <div class="question8-number">最终测试 · 第8题</div>
+                <div class="question8-title">建筑人格判定</div>
+            </div>
+            <div class="question8-text">
+                【第8题问题待填】
+            </div>
+            <div class="question8-options">
+                <div class="question8-option" onclick="selectQuestion8Option(this, 'A')">
+                    <div class="question8-option-letter">A</div>
+                    <div class="question8-option-text">【选项A待填】</div>
+                </div>
+                <div class="question8-option" onclick="selectQuestion8Option(this, 'B')">
+                    <div class="question8-option-letter">B</div>
+                    <div class="question8-option-text">【选项B待填】</div>
+                </div>
+                <div class="question8-option" onclick="selectQuestion8Option(this, 'C')">
+                    <div class="question8-option-letter">C</div>
+                    <div class="question8-option-text">【选项C待填】</div>
+                </div>
+            </div>
+            <button class="question8-btn" id="question8Btn" onclick="submitQuestion8()" disabled>确认答案</button>
+        </div>
+    </div>
+
+    <!-- 计算特效 -->
+    <div class="calculating-overlay" id="calculatingOverlay">
+        <div class="calculating-bg-particles" id="calcParticles"></div>
+        <div class="calculating-rings">
+            <div class="calculating-ring calculating-ring-1"></div>
+            <div class="calculating-ring calculating-ring-2"></div>
+            <div class="calculating-ring calculating-ring-3"></div>
+            <div class="calculating-core"></div>
+            <div class="calculating-icon-center">🏛️</div>
+        </div>
+        <div class="calculating-text">正在生成建筑人格</div>
+        <div class="calculating-progress-container">
+            <div class="calculating-progress">
+                <div class="calculating-progress-bar" id="progressBar"></div>
+            </div>
+            <div class="calculating-status" id="calculatingStatus">分析探索轨迹...</div>
+            <div class="calculating-percent" id="calculatingPercent">0%</div>
+        </div>
+    </div>
+
+    <div class="poster-overlay" id="posterOverlay">
+        <div class="poster-close-btn" onclick="closePoster()">×</div>
+        <div class="poster-container">
+            <div class="poster-header">
+                <div class="poster-label">外滩建筑人格测试</div>
+                <div class="poster-title">你的建筑人格</div>
+            </div>
+            <div class="poster-body">
+                <div class="poster-building">
+                    <div class="poster-building-icon">🏛️</div>
+                </div>
+                <div class="poster-personality">
+                    <div class="poster-personality-label">你是</div>
+                    <div class="poster-personality-name">【人格名称待填】</div>
+                </div>
+                <div class="poster-traits">
+                    <span class="poster-trait">【特质1待填】</span>
+                    <span class="poster-trait">【特质2待填】</span>
+                    <span class="poster-trait">【特质3待填】</span>
+                </div>
+                <div class="poster-quote">
+                    "【人格描述/名言待填】"
+                </div>
+            </div>
+            <div class="poster-footer">
+                <div class="poster-footer-text">档案六 · 外滩建筑人格</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToPoint(pointNumber) {
+            window.location.href = `point${pointNumber}.html`;
+        }
+
+        function showFinishModal() {
+            document.getElementById('finishModal').classList.add('show');
+        }
+
+        function hideFinishModal() {
+            document.getElementById('finishModal').classList.remove('show');
+        }
+
+        function showPoster() {
+            hideFinishModal();
+            hideQuestion8();
+            document.getElementById('posterOverlay').classList.add('show');
+        }
+
+        function closePoster() {
+            document.getElementById('posterOverlay').classList.remove('show');
+        }
+
+        document.getElementById('finishModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideFinishModal();
+            }
+        });
+
+        // 第8题功能
+        let question8Selected = null;
+
+        function showQuestion8() {
+            hideFinishModal();
+            document.getElementById('question8Overlay').classList.add('show');
+        }
+
+        function hideQuestion8() {
+            document.getElementById('question8Overlay').classList.remove('show');
+        }
+
+        function selectQuestion8Option(element, option) {
+            // 移除其他选项的选中状态
+            document.querySelectorAll('.question8-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+            // 添加当前选项的选中状态
+            element.classList.add('selected');
+            question8Selected = option;
+
+            // 启用确认按钮
+            document.getElementById('question8Btn').disabled = false;
+        }
+
+        function submitQuestion8() {
+            if (!question8Selected) return;
+
+            // 保存用户选择
+            localStorage.setItem('question8Answer', question8Selected);
+
+            // 隐藏第8题，显示计算特效
+            hideQuestion8();
+            showCalculating();
+        }
+
+        // 计算特效功能
+        function showCalculating() {
+            document.getElementById('calculatingOverlay').classList.add('show');
+            createCalcParticles();
+
+            const statusTexts = [
+                '分析探索轨迹...',
+                '整合历史记忆...',
+                '匹配建筑特征...',
+                '生成人格画像...',
+                '即将完成...'
+            ];
+
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const statusEl = document.getElementById('calculatingStatus');
+            const percentEl = document.getElementById('calculatingPercent');
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 12 + 3;
+                if (progress > 100) progress = 100;
+
+                progressBar.style.width = progress + '%';
+                percentEl.textContent = Math.floor(progress) + '%';
+
+                const statusIndex = Math.floor((progress / 100) * statusTexts.length);
+                if (statusIndex < statusTexts.length) {
+                    statusEl.textContent = statusTexts[statusIndex];
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        hideCalculating();
+                        showPoster();
+                    }, 800);
+                }
+            }, 250);
+        }
+
+        function createCalcParticles() {
+            const container = document.getElementById('calcParticles');
+            container.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'calculating-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = Math.random() * 30 + '%';
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function hideCalculating() {
+            document.getElementById('calculatingOverlay').classList.remove('show');
+        }
+
+        // 点击遮罩关闭第8题
+        document.getElementById('question8Overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideQuestion8();
+            }
+        });
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        window.onload = function() {
+            createParticles();
+            
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hide');
+            }, 800);
+        };
+    </script>
+</body>
+</html>

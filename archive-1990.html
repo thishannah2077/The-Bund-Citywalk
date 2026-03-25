@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>档案六 · 陈毅广场 · 1949</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8d5b7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .archive-header {
+            text-align: center;
+            padding: 30px 0 20px;
+            position: relative;
+        }
+
+        .archive-number {
+            font-size: 14px;
+            color: #8b7355;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .archive-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.3s forwards;
+        }
+
+        .archive-year {
+            font-size: 36px;
+            font-weight: bold;
+            color: #c9a961;
+            letter-spacing: 5px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .divider {
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.9s forwards;
+        }
+
+        .story-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.2s forwards;
+        }
+
+        .story-section::before {
+            content: '【档案编号：1949·接管这座城市的第一天】';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #1a1a2e;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #d4af37;
+            letter-spacing: 1px;
+        }
+
+        .story-text {
+            font-size: 15px;
+            line-height: 2;
+            text-align: justify;
+            color: #c9b896;
+            min-height: 200px;
+        }
+
+        .story-text p {
+            margin-bottom: 15px;
+            text-indent: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #d4af37;
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .question-section {
+            margin: 30px 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.5s forwards;
+        }
+
+        .question-title {
+            font-size: 18px;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .question-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 10px auto 0;
+        }
+
+        .option-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(15, 52, 96, 0.3) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 0;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .option-card.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.15), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .option-card:hover::before {
+            left: 100%;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.25),
+                        0 0 0 1px rgba(212, 175, 55, 0.1);
+        }
+
+        .option-card:active {
+            transform: scale(0.98);
+        }
+
+        .option-header-bar {
+            display: flex;
+            align-items: center;
+            padding: 15px 18px;
+            background: rgba(212, 175, 55, 0.08);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #d4af37, #c9a961);
+            border-radius: 10px;
+            font-weight: bold;
+            color: #1a1a2e;
+            font-size: 18px;
+            margin-right: 12px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .option-title {
+            font-size: 15px;
+            color: #e8d5b7;
+            font-weight: 600;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .option-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover .option-arrow {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .option-body {
+            padding: 15px 18px;
+        }
+
+        .option-desc {
+            font-size: 13px;
+            color: #9a8b7a;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #5a4a3a;
+            font-size: 12px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 2.5s forwards;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            color: #d4af37;
+            font-size: 16px;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-text">档案解密中...</div>
+    </div>
+
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="archive-header">
+            <div class="archive-number">档案六 · 陈毅广场</div>
+            <div class="archive-title">接管这座城市的第一天</div>
+            <div class="archive-year">1949</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="story-section">
+            <div class="story-text" id="storyText"></div>
+        </div>
+
+        <div class="question-section">
+            <div class="question-title">如果你是1949年站在外滩的陈毅，你会先做什么？</div>
+
+            <div class="option-card" id="optionA" onclick="goToDetail('A')">
+                <div class="option-header-bar">
+                    <span class="option-label">A</span>
+                    <div class="option-title">低下头，先查清这座城市压了多少债、欠了多少人</div>
+                    <div class="option-arrow">→</div>
+                </div>
+                <div class="option-body">
+                    <div class="option-desc">接手一座城市，先要知道它的伤在哪里。通货膨胀、失业、断粮——不把这些数字搞清楚，任何决定都是空话。你不急着看远处，你先低下头，从根基开始。</div>
+                </div>
+            </div>
+
+            <div class="option-card" id="optionB" onclick="goToDetail('B')">
+                <div class="option-header-bar">
+                    <span class="option-label">B</span>
+                    <div class="option-title">抬起头，看向对岸那片什么都没有的空地</div>
+                    <div class="option-arrow">→</div>
+                </div>
+                <div class="option-body">
+                    <div class="option-desc">这座城市欠的债，一百年都没还清。但债不是从这里长出来的——真正的上海，在对岸还没动工的地方。你不想被身后的烂摊子拖住，你要先知道这座城市能长成什么。</div>
+                </div>
+            </div>
+
+            <div class="option-card" id="optionC" onclick="goToDetail('C')">
+                <div class="option-header-bar">
+                    <span class="option-label">C</span>
+                    <div class="option-title">转身，把身后这排楼逐栋看清楚</div>
+                    <div class="option-arrow">→</div>
+                </div>
+                <div class="option-body">
+                    <div class="option-desc">接手之前，先做遗嘱。这些楼是谁建的、给谁用的、现在住着什么人——你要在动手之前，把每一栋都记清楚。历史的账不算清楚，新的就建不稳。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Q7 · 档案编号：1949·接管这座城市的第一天
+        </div>
+    </div>
+
+    <script>
+        const storyContent = `1949年5月27日，上海解放。
+
+当天下午，陈毅站在外滩。
+
+身后，是一百年里各国势力轮流留下的建筑——英国人的、法国人的、日本人占过的，每一栋都有一段不干净的来历。
+
+面前，是黄浦江。江对岸，是农田、是厂房、是低矮的屋顶，什么都不是。
+
+脚下，是还没有换完主人的土地。
+
+他刚刚接管了这座城市。
+
+上海是中国最大的城市，也是烂摊子最多的城市——通货膨胀、工厂停工、难民涌入、地下势力还没清干净。
+
+他知道，接下来每一个决定，都会被这座城市记住。
+
+站在外滩的这一刻，他只有一个问题：`;
+
+        let charIndex = 0;
+        let currentText = '';
+        const storyElement = document.getElementById('storyText');
+
+        function typeWriter() {
+            if (charIndex < storyContent.length) {
+                const char = storyContent.charAt(charIndex);
+                if (char === '\n') {
+                    currentText += '<br>';
+                } else {
+                    currentText += char;
+                }
+                storyElement.innerHTML = currentText + '<span class="typewriter-cursor"></span>';
+                charIndex++;
+                
+                const delay = char === '。' || char === '，' || char === '、' ? 150 : 50;
+                setTimeout(typeWriter, delay);
+            } else {
+                storyElement.innerHTML = currentText;
+                showOptions();
+            }
+        }
+
+        function showOptions() {
+            const options = ['optionA', 'optionB', 'optionC'];
+            options.forEach((id, index) => {
+                setTimeout(() => {
+                    document.getElementById(id).classList.add('show');
+                }, index * 200);
+            });
+        }
+
+        function goToDetail(option) {
+            window.location.href = `archive-1990-detail.html?option=${option}`;
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        window.onload = function() {
+            createParticles();
+            
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hide');
+                setTimeout(typeWriter, 500);
+            }, 800);
+        };
+    </script>
+</body>
+</html>
